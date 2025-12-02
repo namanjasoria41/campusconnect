@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Feed - CampusConnect{% endblock %}
+{% block content %}
+
+<div class="row">
+
+  <!-- LEFT: Stories + Feed -->
+  <div class="col-lg-8">
+
+    <!-- STORY STRIP -->
+    <div class="story-strip d-flex align-items-center gap-3 mb-4">
+
+      <!-- Your Story bubble -->
+      <div class="story-bubble text-center">
+        <div class="story-ring {% if my_story %}story-ring-active{% else %}story-ring-empty{% endif %}">
+          <label for="story-upload-input" class="story-avatar-wrapper">
+            {% if current_user.photo %}
+              <img src="{{ url_for('static', filename='uploads/' ~ current_user.photo) }}" class="story-avatar-img">
+            {% else %}
+              <div class="story-avatar-placeholder">
+                {{ current_user.name[0]|upper }}
+              </div>
+            {% endif %}
+            <div class="story-add-badge">+</div>
+          </label>
+        </div>
+        <small class="text-muted d-block mt-1">
+          {% if my_story %}Your Story{% else %}Add Story{% endif %}
+        </small>
+
+        <form id="story-upload-form" action="{{ url_for('stories.upload_story') }}" method="post" enctype="multipart/form-data">
+          <input type="file" id="story-upload-input" name="media"
+                 accept="image/*,video/*" style="display:none"
+                 onchange="document.getElementById('story-upload-form').submit();">
+        </form>
+      </div>
+
+      {% for u in story_users %}
+      <div class="story-bubble text-center">
+        <a href="{{ url_for('stories.view_story', user_id=u.id) }}" class="text-decoration-none">
+          <div class="story-ring story-ring-active">
+            {% if u.photo %}
+              <img src="{{ url_for('static', filename='uploads/' ~ u.photo) }}" class="story-avatar-img">
+            {% else %}
+              <div class="story-avatar-placeholder">
+                {{ u.name[0]|upper }}
+              </div>
+            {% endif %}
+          </div>
+          <small class="text-muted d-block mt-1">
+            {{ u.name.split()[0] }}
+          </small>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- NEW POST -->
+    <h2 class="mb-3">Campus Feed</h2>
+
+    <form method="post" class="mb-4">
+      <textarea class="form-control" name="text"
+                rows="3"
+                placeholder="Share something... use #hashtags to get discovered 🔍"></textarea>
+      <button class="btn btn-primary mt-2">Post</button>
+    </form>
+
+    {% if posts %}
+      {% for post in posts %}
+      <div class="card glass-card mb-3">
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <strong>{{ post.author.name }}</strong>
+
+              {% if post.type == 'announcement' %}
+                <span class="badge featured-badge ms-1">Announcement</span>
+              {% endif %}
+
+              {% if post.is_featured %}
+                <span class="badge featured-badge ms-1">Featured</span>
+              {% endif %}
+            </div>
+
+            <small class="text-muted">
+              {{ post.created_at.strftime('%d %b %Y %H:%M') }}
+            </small>
+          </div>
+
+          <p class="mb-2">
+            {{ post.text|link_hashtags|safe }} 
+          </p>
+
+          {% if post.hashtags %}
+          <div class="mt-1 d-flex flex-wrap gap-1">
+            {% for tag in post.hashtags %}
+            <a class="hashtag-chip" href="{{ url_for('hashtags.tag_page', tag=tag.tag) }}">
+              #{{ tag.tag }}
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No posts yet.</p>
+    {% endif %}
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="col-lg-4 mt-4 mt-lg-0">
+
+    <div class="glass-card mb-3">
+      <h5 class="mb-3">🔥 Trending hashtags</h5>
+
+      {% if trending %}
+        <ul class="list-unstyled mb-0">
+        {% for t in trending %}
+          <li class="mb-2">
+            <a href="{{ url_for('hashtags.tag_page', tag=t.tag) }}" class="hashtag-link">
+              #{{ t.tag }}
+            </a>
+            <small class="text-muted ms-1">{{ t.count }} posts</small>
+          </li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted">No trending tags yet.</p>
+      {% endif %}
+    </div>
+
+    {% if current_user.is_admin %}
+    <div class="glass-card">
+      <h5 class="mb-3">Admin Panel</h5>
+      <ul class="list-unstyled small mb-0">
+        <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('admin.create_event') }}">Create Event</a></li>
+        <li><a href="{{ url_for('admin.create_announcement') }}">Post Announcement</a></li>
+        <li><a href="{{ url_for('admin.users') }}">Manage Users</a></li>
+      </ul>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
