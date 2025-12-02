@@ -1,0 +1,292 @@
+/* =========================================================
+   CAMPUSCONNECT – GEN-Z, NEON, TRIPPY INTERFACE
+   (Upgraded version of your file: keeps everything + boosts it)
+   ========================================================= */
+
+/* ---------- GLOBAL ---------- */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at 20% 10%, #111, #0b0b0b 40%, #050505);
+    background-attachment: fixed;
+    color: #e4e4e4;
+    overflow-x: hidden;
+}
+
+/* Neon dust floating particles */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 2px);
+    background-size: 120px 120px, 180px 180px;
+    background-position: 20px 40px, 100px 150px;
+    opacity: 0.3;
+    animation: dustMove 25s linear infinite;
+}
+
+@keyframes dustMove {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-200px); }
+}
+
+/* ---------- NAVBAR ---------- */
+
+.glass-nav {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.neon-text {
+    color: #7ddfff;
+    text-shadow: 0 0 8px #2fd5ff, 0 0 20px #009dff;
+}
+
+.nav-link-glow {
+    color: #bbbbbb;
+    transition: 0.25s ease-in-out;
+    position: relative;
+    font-weight: 500;
+}
+
+.nav-link-glow:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px #2fd5ff, 0 0 14px #00f6ff;
+    transform: translateY(-2px);
+}
+
+.nav-link-glow::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    right: 5px;
+    height: 2px;
+    background: linear-gradient(90deg, #2fd5ff, #00b0ff);
+    opacity: 0;
+    transform: scaleX(0);
+    transition: 0.3s;
+}
+
+.nav-link-glow:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Premium pill */
+.premium-pill {
+    padding: 5px 14px;
+    border-radius: 30px;
+    background: linear-gradient(120deg, #f093fb, #f5576c, #ff9a8b);
+    background-size: 200% auto;
+    color: white !important;
+    font-weight: 600;
+    animation: premiumGlow 4s linear infinite;
+}
+
+@keyframes premiumGlow {
+    0% { box-shadow: 0 0 6px #ff7fc6; }
+    50% { box-shadow: 0 0 18px #ff4cc1; }
+    100% { box-shadow: 0 0 6px #ff7fc6; }
+}
+
+/* ---------- CARDS & GLASS ---------- */
+
+.glass-card,
+.card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    padding: 15px;
+    backdrop-filter: blur(12px);
+    transition: 0.25s;
+}
+
+.card:hover,
+.glass-card:hover {
+    border: 1px solid rgba(95,255,224,0.3);
+    box-shadow: 0 0 20px rgba(95,255,224,0.15);
+    transform: translateY(-3px);
+}
+
+/* ---------- BUTTONS ---------- */
+
+.btn-primary {
+    background: linear-gradient(135deg, #2fd5ff, #1b8be0);
+    border: none;
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5be7ff, #2cb0ff);
+    box-shadow: 0 0 12px #2fd5ff;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #77ff9a, #3bcc6f);
+    border: none;
+    transition: 0.25s;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #96ffc0, #53dd83);
+    box-shadow: 0 0 12px #53dd83;
+}
+
+/* ---------- INPUTS ---------- */
+
+.form-control {
+    background: rgba(255,255,255,0.07);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.25s;
+}
+
+.form-control:focus {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid #2fd5ff;
+    box-shadow: 0 0 10px #2fd5ff60;
+    outline: none;
+}
+
+/* ---------- STORIES (UPGRADED) ---------- */
+
+.story-strip {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 10px 4px;
+    scrollbar-width: none;
+}
+
+.story-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.story-bubble {
+    width: 80px;
+    text-align: center;
+    flex: 0 0 auto;
+}
+
+.story-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    padding: 3px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.story-ring-active {
+    background: conic-gradient(
+        #ff5e62,
+        #ff9966,
+        #f093fb,
+        #77e9ff,
+        #ff5e62
+    );
+    animation: neonSpin 4s linear infinite;
+}
+
+@keyframes neonSpin {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.story-avatar-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid rgba(255,255,255,0.15);
+}
+
+/* ---------- HASHTAGS ---------- */
+
+.hashtag-chip {
+    background: rgba(95,255,224,0.12);
+    border: 1px solid rgba(95,255,224,0.35);
+    padding: 4px 10px;
+    border-radius: 18px;
+    color: #5be7ff;
+    transition: 0.25s;
+}
+
+.hashtag-chip:hover {
+    background: rgba(95,255,224,0.2);
+    box-shadow: 0 0 12px rgba(95,255,224,0.45);
+    transform: translateY(-2px);
+}
+
+.hashtag-link {
+    color: #5be7ff;
+    text-decoration: none;
+}
+
+.hashtag-link:hover {
+    text-shadow: 0 0 6px #2fd5ff;
+}
+
+/* ---------- SWIPE CARDS ---------- */
+
+.swipe-card {
+    padding: 25px;
+    border-radius: 22px;
+    background: rgba(40,40,40,0.45);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.swipe-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 0 25px #2fd5ff55;
+}
+
+/* ---------- CHAT ---------- */
+
+.chat-bubble {
+    padding: 10px 14px;
+    border-radius: 16px;
+    max-width: 75%;
+    margin-bottom: 8px;
+}
+
+.chat-left {
+    background: rgba(255,255,255,0.1);
+}
+
+.chat-right {
+    background: linear-gradient(135deg, #2fd5ff, #1b8be0);
+    color: #000;
+    font-weight: 600;
+    margin-left: auto;
+    box-shadow: 0 0 10px #2fd5ff70;
+}
+
+/* ---------- MOBILE OPTIMIZATION ---------- */
+
+@media(max-width: 768px) {
+    .glass-card, .card { padding: 12px; }
+    .story-ring { width: 62px; height: 62px; }
+    .story-bubble { width: 68px; }
+    .navbar-brand { font-size: 1.1rem; }
+}
+
+@media(max-width: 480px) {
+    .story-ring { width: 55px; height: 55px; }
+    .story-bubble { width: 60px; }
+    h2 { font-size: 1.2rem; }
+}
