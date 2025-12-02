@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}CampusConnect{% endblock %}</title>
+
+  <!-- Modern dark Bootstrap theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-dark text-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark glass-nav shadow-sm">
+  <div class="container-fluid">
+
+    <a class="navbar-brand fw-bold neon-text" href="{{ url_for('main.feed') }}">
+      CampusConnect
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarsExample">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample">
+      <ul class="navbar-nav ms-auto gap-2">
+
+        {% if current_user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('gossip.feed') }}">Gossips</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('main.feed') }}">Feed</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('events.list_events') }}">Events</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('swipe.swipe_view') }}">Swipe</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('chat.matches') }}">Chat</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('profiles.me') }}">Profile</a>
+          </li>
+
+          {% if current_user.is_admin %}
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow text-warning" href="{{ url_for('admin.dashboard') }}">
+              Admin
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow premium-pill" href="{{ url_for('billing.pricing') }}">
+              {{ current_user.plan|capitalize }}
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('auth.logout') }}">Logout</a>
+          </li>
+
+        {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('billing.pricing') }}">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('auth.login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow" href="{{ url_for('auth.register') }}">Register</a>
+          </li>
+
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }} glass-card alert-dismissible fade show" role="alert">
+          {{ msg }}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
