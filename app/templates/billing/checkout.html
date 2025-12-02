@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Checkout - {{ plan.name }}{% endblock %}
+{% block content %}
+
+<h2>Checkout - {{ plan.name }} Plan</h2>
+<p>Amount: ₹{{ plan.price_inr }}</p>
+
+<form action="{{ url_for('billing.payment_callback') }}" method="POST">
+  <input type="hidden" name="plan_key" value="{{ plan_key }}">
+  <input type="hidden" name="razorpay_order_id" value="{{ order.id }}" id="razorpay_order_id">
+  <button id="pay-btn" class="btn btn-success">Pay with Razorpay</button>
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+      "key": "{{ razorpay_key }}",
+      "amount": "{{ order.amount }}",
+      "currency": "INR",
+      "name": "CampusConnect",
+      "description": "{{ plan.name }} subscription",
+      "order_id": "{{ order.id }}",
+      "handler": function (response){
+          var form = document.forms[0];
+
+          var paymentInput = document.createElement("input");
+          paymentInput.type = "hidden";
+          paymentInput.name = "razorpay_payment_id";
+          paymentInput.value = response.razorpay_payment_id;
+          form.appendChild(paymentInput);
+
+          var signatureInput = document.createElement("input");
+          signatureInput.type = "hidden";
+          signatureInput.name = "razorpay_signature";
+          signatureInput.value = response.razorpay_signature;
+          form.appendChild(signatureInput);
+
+          form.submit();
+      },
+      "theme": {
+          "color": "#0d6efd"
+      }
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById('pay-btn').onclick = function(e){
+      rzp1.open();
+      e.preventDefault();
+  }
+</script>
+{% endblock %}
