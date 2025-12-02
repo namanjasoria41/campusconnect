@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Register - CampusConnect{% endblock %}
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input class="form-control" name="name" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">College Email</label>
+    <input class="form-control" name="email" type="email" required>
+    <div class="form-text">Use your @vitbhopal.ac.in email.</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    <input class="form-control" name="password" type="password" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Confirm Password</label>
+    <input class="form-control" name="confirm" type="password" required>
+  </div>
+  <button class="btn btn-primary">Sign up</button>
+  <a class="btn btn-link" href="{{ url_for('auth.login') }}">Already have an account?</a>
+</form>
+{% endblock %}
