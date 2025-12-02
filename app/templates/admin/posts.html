@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Manage Posts - Admin{% endblock %}
+{% block content %}
+
+<div class="glass-card p-4">
+  <h3 class="mb-3">Posts</h3>
+  <div class="table-responsive">
+    <table class="table table-dark table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Type</th>
+          <th>Text</th>
+          <th>Featured</th>
+          <th>Created</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in posts %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.author.name if p.author else 'Unknown' }}</td>
+            <td>{{ p.type or 'general' }}</td>
+            <td style="max-width: 320px;">{{ p.text[:120] }}{% if p.text|length > 120 %}...{% endif %}</td>
+            <td>
+              {% if p.is_featured %}
+                <span class="badge bg-warning text-dark">Yes</span>
+              {% else %}
+                <span class="badge bg-secondary">No</span>
+              {% endif %}
+            </td>
+            <td>{{ p.created_at.strftime('%d %b %Y %H:%M') }}</td>
+            <td class="text-end">
+              {% if p.is_featured %}
+                <a href="{{ url_for('admin.unfeature_post', post_id=p.id) }}"
+                   class="btn btn-sm btn-outline-light">Unfeature</a>
+              {% else %}
+                <a href="{{ url_for('admin.feature_post', post_id=p.id) }}"
+                   class="btn btn-sm btn-outline-light">Feature</a>
+              {% endif %}
+              <a href="{{ url_for('admin.delete_post', post_id=p.id) }}"
+                 class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

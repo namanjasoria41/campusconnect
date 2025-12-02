@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Post Announcement - Admin{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="glass-card p-4">
+      <h3 class="mb-3">Post Announcement</h3>
+      <p class="text-muted mb-4">
+        Announcements appear in the campus feed as highlighted posts
+        (e.g., exam updates, placement notices, important information).
+      </p>
+
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Announcement Text</label>
+          <textarea class="form-control" name="text" rows="4" required
+                    placeholder="e.g. Mid-sem exams start from 12 March..."></textarea>
+        </div>
+
+        <button class="btn btn-primary w-100">Post Announcement</button>
+
+        <div class="text-center mt-3">
+          <a href="{{ url_for('admin.dashboard') }}" class="text-muted small">
+            ← Back to dashboard
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

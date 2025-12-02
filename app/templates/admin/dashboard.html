@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - CampusConnect{% endblock %}
+{% block content %}
+
+<div class="glass-card p-4">
+  <h2 class="mb-4">Admin Dashboard</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card glass-card mb-3">
+        <div class="card-body">
+          <h6 class="text-muted">Users</h6>
+          <h3>{{ user_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card glass-card mb-3">
+        <div class="card-body">
+          <h6 class="text-muted">Posts</h6>
+          <h3>{{ post_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card glass-card mb-3">
+        <div class="card-body">
+          <h6 class="text-muted">Gossips</h6>
+          <h3>{{ gossip_count }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card glass-card mb-3">
+        <div class="card-body">
+          <h6 class="text-muted">Open Reports</h6>
+          <h3>{{ report_open_count }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h5 class="mb-2">Events</h5>
+    <p class="text-muted mb-0">{{ event_count }} total events.</p>
+  </div>
+
+  <div class="mb-4">
+    <h5 class="mb-2">Posts in last days</h5>
+    {% if post_stats %}
+      <ul class="small text-muted">
+        {% for day, count in post_stats %}
+          <li>{{ day }}: {{ count }} posts</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted small mb-0">No post stats yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{{ url_for('admin.users') }}" class="btn btn-outline-light btn-sm">Manage Users</a>
+    <a href="{{ url_for('admin.posts') }}" class="btn btn-outline-light btn-sm">Manage Posts</a>
+    <a href="{{ url_for('admin.gossips') }}" class="btn btn-outline-light btn-sm">Manage Gossips</a>
+    <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-light btn-sm">Review Reports</a>
+    <a href="{{ url_for('admin.create_event') }}" class="btn btn-outline-light btn-sm">Create Event</a>
+    <a href="{{ url_for('admin.create_announcement') }}" class="btn btn-outline-light btn-sm">Post Announcement</a>
+  </div>
+</div>
+
+{% endblock %}

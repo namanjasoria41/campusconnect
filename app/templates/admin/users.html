@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Manage Users - Admin{% endblock %}
+{% block content %}
+
+<div class="glass-card p-4">
+  <h3 class="mb-3">Users</h3>
+
+  <div class="table-responsive">
+    <table class="table table-dark table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Admin</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.name }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+              {% if u.is_admin %}
+                <span class="badge bg-info text-dark">Admin</span>
+              {% else %}
+                <span class="badge bg-secondary">User</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if u.is_banned %}
+                <span class="badge bg-danger">Banned</span>
+              {% else %}
+                <span class="badge bg-success">Active</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              {% if not u.is_admin %}
+                {% if u.is_banned %}
+                  <a href="{{ url_for('admin.unban_user', user_id=u.id) }}"
+                     class="btn btn-sm btn-outline-success">
+                    Unban
+                  </a>
+                {% else %}
+                  <a href="{{ url_for('admin.ban_user', user_id=u.id) }}"
+                     class="btn btn-sm btn-outline-danger">
+                    Ban
+                  </a>
+                {% endif %}
+              {% else %}
+                <span class="text-muted small">Protected</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light btn-sm mt-3">
+    ← Back to dashboard
+  </a>
+</div>
+
+{% endblock %}
