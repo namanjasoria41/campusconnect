@@ -1,191 +1,166 @@
 {% extends "base.html" %}
-{% block title %}Gossips - CampusConnect{% endblock %}
+{% block title %}Anonymous Gossip - CampusConnect{% endblock %}
 {% block content %}
 
 <div class="row">
 
-  <!-- LEFT: Create + Gossips -->
+  <!-- MAIN CONTENT (LEFT SIDE) -->
   <div class="col-lg-8">
 
-    <!-- HEADING + SUBTEXT -->
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h4 class="feed-heading mb-0">Anonymous Gossips</h4>
-      <span class="tiny text-muted d-none d-sm-inline">
-        Share tea, not names ☕
-      </span>
+    <!-- POST GOSSIP BOX -->
+    <div class="glass-card mb-4">
+      <h4 class="mb-2 feed-heading">Anonymous Gossips 👀</h4>
+      <p class="text-muted tiny mb-3">
+        Share anything about campus life, fests, hostels, crushes, professors...
+        Everything is posted <strong>anonymously</strong>. Be fun, not toxic.
+      </p>
+
+      <form method="post">
+        <div class="mb-2">
+          <textarea class="form-control" name="text" rows="3"
+                    placeholder="What's the latest tea? ☕"
+                    required></textarea>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <label class="tiny text-muted mb-0">Category:</label>
+          <select class="form-select form-select-sm w-auto" name="category">
+            {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat|capitalize }}</option>
+            {% endfor %}
+          </select>
+
+          <button class="btn btn-primary ms-auto">Post anonymously</button>
+        </div>
+      </form>
     </div>
-    <p class="text-muted tiny mb-3">
-      Your name is never shown. Use it for fun campus stories, rumors, crush confessions, and more — but keep it respectful.
-    </p>
 
     <!-- FILTER BAR -->
-    <form method="get" class="row g-2 align-items-center mb-3 gossip-filter-row">
-      <div class="col-12 col-md-7">
-        <div class="d-flex flex-wrap gap-2">
-          {% set cf = category_filter or 'all' %}
-          <a href="{{ url_for('gossip.feed') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'all' %}active{% endif %}">
-            All
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+      <!-- Category filter -->
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('gossip.feed', category='all', sort=current_sort) }}"
+           class="badge rounded-pill 
+                  {% if current_category=='all' %}bg-light text-dark{% else %}bg-secondary{% endif %}">
+          All
+        </a>
+
+        {% for cat in categories %}
+          <a href="{{ url_for('gossip.feed', category=cat, sort=current_sort) }}"
+             class="badge rounded-pill 
+                    {% if current_category==cat %}bg-light text-dark{% else %}bg-secondary{% endif %}">
+            {{ cat|capitalize }}
           </a>
-          <a href="{{ url_for('gossip.feed', category='hostel') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'hostel' %}active{% endif %}">
-            Hostel
-          </a>
-          <a href="{{ url_for('gossip.feed', category='crush') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'crush' %}active{% endif %}">
-            Crush
-          </a>
-          <a href="{{ url_for('gossip.feed', category='fest') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'fest' %}active{% endif %}">
-            Fest
-          </a>
-          <a href="{{ url_for('gossip.feed', category='professors') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'professors' %}active{% endif %}">
-            Professors
-          </a>
-          <a href="{{ url_for('gossip.feed', category='placements') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'placements' %}active{% endif %}">
-            Placements
-          </a>
-          <a href="{{ url_for('gossip.feed', category='random') }}"
-             class="badge rounded-pill gossip-chip {% if cf == 'random' %}active{% endif %}">
-            Random
-          </a>
-        </div>
+        {% endfor %}
       </div>
 
-      <div class="col-12 col-md-5 mt-2 mt-md-0 text-md-end">
-        <label class="tiny text-muted me-1">Sort by:</label>
-        {% set sb = sort_by or 'latest' %}
-        <select name="sort" class="form-select form-select-sm d-inline-block w-auto"
-                onchange="this.form.submit()">
-          <option value="latest" {% if sb == 'latest' %}selected{% endif %}>Latest</option>
-          <option value="top" {% if sb == 'top' %}selected{% endif %}>Top</option>
-          <option value="hot" {% if sb == 'hot' %}selected{% endif %}>Hot</option>
+      <!-- Sorting dropdown -->
+      <form method="get" class="d-flex align-items-center gap-1">
+        <input type="hidden" name="category" value="{{ current_category }}">
+        <label class="tiny text-muted mb-0">Sort by:</label>
+        <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="latest" {% if current_sort=='latest' %}selected{% endif %}>Latest</option>
+          <option value="top" {% if current_sort=='top' %}selected{% endif %}>Top</option>
+          <option value="hot" {% if current_sort=='hot' %}selected{% endif %}>Hot</option>
         </select>
-        {# preserve category in query #}
-        {% if cf and cf != 'all' %}
-          <input type="hidden" name="category" value="{{ cf }}">
-        {% endif %}
-      </div>
-    </form>
-
-    <!-- NEW GOSSIP FORM -->
-    <div class="glass-card mb-3">
-      <form method="post">
-        <label class="form-label tiny text-uppercase text-muted mb-1">
-          Drop a gossip anonymously
-        </label>
-
-        <textarea
-          class="form-control"
-          name="text"
-          rows="3"
-          placeholder="What's happening in hostel, classes, fest prep, placements... 👀"
-          required
-        ></textarea>
-
-        <div class="d-flex flex-wrap align-items-center justify-content-between mt-2 gap-2">
-          <div class="d-flex align-items-center gap-2">
-            <label class="tiny text-muted mb-0">Category:</label>
-            <select class="form-select form-select-sm" name="category">
-              <option value="random">Random</option>
-              <option value="hostel">Hostel</option>
-              <option value="crush">Crush</option>
-              <option value="fest">Fest</option>
-              <option value="professors">Professors</option>
-              <option value="placements">Placements</option>
-            </select>
-          </div>
-
-          <button class="btn btn-primary btn-sm">
-            Post gossip
-          </button>
-        </div>
       </form>
     </div>
 
     <!-- GOSSIP LIST -->
     {% if gossips %}
-      {% for gossip in gossips %}
-      <div class="card glass-card mb-3 gossip-card">
-        <div class="card-body">
+      {% for g in gossips %}
+        <div class="card glass-card mb-3">
+          <div class="card-body">
 
-          <!-- Header: category + time -->
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <div class="d-flex align-items-center gap-2">
-              <span class="badge rounded-pill gossip-category-pill">
-                {{ gossip.category|capitalize if gossip.category else "Random" }}
-              </span>
-              <span class="tiny text-muted">Anonymous</span>
-            </div>
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between mb-2">
+              <div>
+                <strong>Anon</strong>
+                <small class="text-muted ms-2">{{ g.category|capitalize }}</small>
+              </div>
 
-            {% if gossip.created_at %}
               <small class="text-muted tiny">
-                {{ gossip.created_at.strftime('%d %b %Y %H:%M') }}
+                {{ g.created_at.strftime('%d %b %Y %H:%M') }}
               </small>
-            {% endif %}
-          </div>
-
-          <!-- Text -->
-          <p class="mb-2 gossip-text">
-            {{ gossip.text }}
-          </p>
-
-          <!-- Footer: counts / actions -->
-          <div class="d-flex justify-content-between align-items-center tiny text-muted mt-1">
-            <div class="d-flex align-items-center gap-3">
-              <div class="d-flex align-items-center gap-1">
-                <i class="bi bi-arrow-up-circle"></i>
-                <span>{{ gossip.score if gossip.score is defined else (gossip.votes|length if gossip.votes is defined else 0) }}</span>
-              </div>
-              <div class="d-flex align-items-center gap-1">
-                <i class="bi bi-chat-dots"></i>
-                <span>{{ gossip.comments|length if gossip.comments is defined else 0 }} comments</span>
-              </div>
             </div>
 
-            {# If you later add a detail page, link it here #}
-            {# <a href="{{ url_for('gossip.detail', gossip_id=gossip.id) }}" class="tiny text-info text-decoration-none">
-                 View thread
-               </a> #}
-          </div>
+            <!-- GOSSIP TEXT -->
+            <p class="mb-3 gossip-text">{{ g.text }}</p>
 
+            <!-- VOTE + VIEW BUTTON -->
+            <div class="d-flex justify-content-between align-items-center">
+
+              <!-- Voting buttons -->
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light gossip-vote-btn"
+                        type="button"
+                        data-id="{{ g.id }}" data-action="up">▲</button>
+
+                <span id="gossip-score-{{ g.id }}">
+                  {{ g.upvotes - g.downvotes }}
+                </span>
+
+                <button class="btn btn-sm btn-outline-light gossip-vote-btn"
+                        type="button"
+                        data-id="{{ g.id }}" data-action="down">▼</button>
+              </div>
+
+              <!-- View full post -->
+              <a href="{{ url_for('gossip.detail', gossip_id=g.id) }}"
+                 class="btn btn-sm btn-outline-info">
+                View & Comment
+              </a>
+
+            </div>
+
+          </div>
         </div>
-      </div>
       {% endfor %}
     {% else %}
-      <p class="text-muted mt-3">No gossips yet. Be the first to spill some tea ☕</p>
+      <p class="text-muted">No gossips yet. Be the first to post 🤫</p>
     {% endif %}
 
   </div>
 
-  <!-- RIGHT: Rules / Tips -->
+  <!-- SIDEBAR (RIGHT SIDE) -->
   <div class="col-lg-4 mt-4 mt-lg-0">
 
-    <div class="glass-card mb-3">
-      <h5 class="mb-2">Gossip rules</h5>
-      <ul class="small text-muted mb-0 ps-3">
-        <li>No direct bullying or hate.</li>
-        <li>No sharing phone numbers or personal data.</li>
-        <li>Keep it fun, light, and campus-related.</li>
-        <li>Admins can remove harmful posts.</li>
-      </ul>
-    </div>
-
     <div class="glass-card">
-      <h5 class="mb-3">Popular categories</h5>
-      <div class="d-flex flex-wrap gap-2 small">
-        <span class="badge bg-dark-subtle text-light">Hostel drama</span>
-        <span class="badge bg-dark-subtle text-light">Crush confessions</span>
-        <span class="badge bg-dark-subtle text-light">Fest gossip</span>
-        <span class="badge bg-dark-subtle text-light">Placement tea</span>
-      </div>
+      <h5 class="mb-2">Rules</h5>
+      <ul class="small mb-0">
+        <li>No real names / personal attacks.</li>
+        <li>No harassment or hate speech.</li>
+        <li>Admins can remove abusive content.</li>
+      </ul>
     </div>
 
   </div>
 
 </div>
+
+<!-- VOTING SCRIPT -->
+<script>
+document.querySelectorAll(".gossip-vote-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const id = this.dataset.id;
+    const action = this.dataset.action;
+
+    fetch(`/gossip/vote/${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `action=${action}`
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        document.getElementById(`gossip-score-${id}`).innerText = data.score;
+      }
+    })
+    .catch(console.error);
+  });
+});
+</script>
 
 {% endblock %}
 
