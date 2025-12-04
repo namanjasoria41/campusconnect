@@ -79,8 +79,11 @@
     <!-- NEW POST -->
     <h4 class="feed-heading">Campus Feed</h4>
 
-    <form method="post" class="mb-4">
-      <textarea class="form-control" name="text" rows="3"
+    <form id="new-post-form" method="post" class="mb-4">
+      <textarea id="new-post-text"
+                class="form-control"
+                name="text"
+                rows="3"
                 placeholder="Share something... use #hashtags to get discovered 🔍"></textarea>
       <button class="btn btn-primary mt-2">Post</button>
     </form>
@@ -174,7 +177,23 @@
     {% endif %}
 
   </div>
-
 </div>
+
+<!-- FLOATING ADD POST BUTTON (MOBILE) -->
+<button
+  type="button"
+  class="fab-add-post d-lg-none"
+  onclick="ccFocusNewPost()">
+  <i class="bi bi-plus-lg"></i>
+</button>
+
+<script>
+  function ccFocusNewPost() {
+    const textarea = document.getElementById("new-post-text");
+    if (!textarea) return;
+    textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => textarea.focus(), 400);
+  }
+</script>
 
 {% endblock %}
