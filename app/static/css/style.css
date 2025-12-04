@@ -674,12 +674,22 @@ body::before {
     transform: translateY(0px) scale(0.97);
 }
 
-/* Hide bottom nav on desktop (safety; HTML also uses d-lg-none) */
-@media (min-width: 992px) {
-    .mobile-bottom-nav {
-        display: none;
+/* Compact top navbar on phones, but keep menu working */
+@media (max-width: 768px) {
+    .navbar {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+        min-height: 50px;
     }
+
+    .navbar-brand {
+        font-size: 1.05rem;
+    }
+
+    /* DO NOT hide .navbar-nav here, otherwise the dropdown never shows */
+    /* Let Bootstrap handle showing/hiding it in the collapse */
 }
+
 
 /* ---------- FLOATING ADD POST BUTTON ---------- */
 
@@ -1204,5 +1214,6 @@ body::before {
 .fab-add-post i {
     color: #020014;
 }
+
 
 
