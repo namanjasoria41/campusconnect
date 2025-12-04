@@ -736,3 +736,473 @@ body::before {
         font-size: 1.1rem;
     }
 }
+
+/* =========================================================
+   MINIMAL DARK THEME – REDDIT / DISCORD STYLE OVERRIDES
+   (paste at bottom of style.css)
+   ========================================================= */
+
+/* --- Base background: solid, no gradients/noise --- */
+
+body {
+    background: #020617;
+    color: #e5e7eb;
+}
+
+/* Kill the noisy overlay */
+body::before {
+    background: none;
+    opacity: 0;
+}
+
+/* --- Navbar: flat Discord-style bar --- */
+
+.glass-nav {
+    background: #020617;
+    border-bottom: 1px solid #1f2937;
+    backdrop-filter: none;
+}
+
+.neon-text {
+    color: #60a5fa;
+    text-shadow: none;
+    font-weight: 600;
+}
+
+.nav-link-glow {
+    color: #e5e7eb;
+    font-weight: 500;
+}
+
+.nav-link-glow::after {
+    display: none; /* remove glowing underline */
+}
+
+/* --- Layout: still mobile-first, just less padding --- */
+
+.main-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+    padding-top: 8px;
+}
+
+/* --- Cards: flat, simple, low shadow --- */
+
+.glass-card,
+.card {
+    background: #111827;
+    border-radius: 14px;
+    border: 1px solid #1f2937;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    backdrop-filter: none;
+    transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.glass-card:hover,
+.card:hover {
+    border-color: #1f2937;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    transform: translateY(-1px);
+}
+
+/* Tighter on phones */
+@media (max-width: 768px) {
+    .glass-card,
+    .card.glass-card {
+        padding: 10px 12px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+}
+
+/* --- Buttons: simple blue, no heavy gradients --- */
+
+.btn-primary {
+    background: #3b82f6;
+    border-radius: 999px;
+    border: none;
+    box-shadow: none;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    box-shadow: none;
+}
+
+.btn-success {
+    background: #22c55e;
+    border: none;
+    border-radius: 999px;
+}
+
+.btn-success:hover {
+    background: #16a34a;
+}
+
+/* --- Inputs: flat dark boxes like Discord --- */
+
+.form-control {
+    background: #020617;
+    border-radius: 10px;
+    border: 1px solid #1f2937;
+    box-shadow: none;
+}
+
+.form-control:focus {
+    background: #020617;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+}
+
+/* --- Story strip: simple ring, no rainbow --- */
+
+.story-ring-active {
+    background: none;
+    border: 2px solid #3b82f6;
+    box-shadow: none;
+}
+
+.story-ring-empty {
+    background: none;
+    border: 2px dashed #4b5563;
+}
+
+.story-avatar-wrapper {
+    background: #020617;
+}
+
+.story-add-badge {
+    background: #3b82f6;
+    color: #020617;
+}
+
+/* --- Story viewer: neutral progress bar --- */
+
+.story-progress-segment {
+    background: #1f2937;
+}
+
+.story-progress-fill {
+    background: #e5e7eb;
+}
+
+/* --- Swipe card: reduce glow, flatten --- */
+
+.swipe-card {
+    background: #111827;
+    border-radius: 16px;
+    border: 1px solid #1f2937;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.swipe-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.75);
+}
+
+.swipe-btn.skip {
+    background: #020617;
+    border: 1px solid #4b5563;
+    color: #e5e7eb;
+}
+
+.swipe-btn.like {
+    background: #ef4444;
+    color: #f9fafb;
+}
+
+/* --- Profile avatar: simpler border, no glam --- */
+
+.profile-avatar-img,
+.profile-avatar-placeholder {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    border: 2px solid #1f2937;
+    background: #111827;
+}
+
+/* --- Chat style: Reddit/Discord-like bubbles --- */
+
+.chat-message.theirs .chat-bubble {
+    background: #111827;
+    border: 1px solid #1f2937;
+}
+
+.chat-message.mine .chat-bubble {
+    background: #3b82f6;
+    color: #f9fafb;
+    box-shadow: none;
+}
+
+/* --- Mobile bottom nav: flat, no glow --- */
+
+.mobile-bottom-nav {
+    background: #020617;
+    border-top: 1px solid #1f2937;
+    backdrop-filter: none;
+}
+
+.mobile-nav-item {
+    color: #9ca3af;
+}
+
+.mobile-nav-item.active {
+    color: #60a5fa;
+    transform: translateY(0);
+}
+
+.mobile-nav-item.active i {
+    text-shadow: none;
+}
+
+/* --- Floating + button: simpler, less “gaming” --- */
+
+.fab-add-post {
+    background: #3b82f6;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+}
+
+.fab-add-post i {
+    color: #f9fafb;
+}
+
+/* =========================================================
+   DARK PINK THEME – CLEAN & MINIMAL
+   (paste at bottom of style.css)
+   ========================================================= */
+
+/* --- Base background: slightly pinkish dark --- */
+
+body {
+    background: radial-gradient(circle at top, #120617 0%, #020014 45%, #020014 100%);
+    color: #e5e7eb;
+}
+
+/* soft overlay more subtle than before */
+body::before {
+    opacity: 0.12;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 2px);
+}
+
+/* --- Navbar: dark with pink accent --- */
+
+.glass-nav {
+    background: rgba(10, 6, 18, 0.96);
+    border-bottom: 1px solid rgba(148, 27, 109, 0.4);
+    backdrop-filter: blur(14px);
+}
+
+.neon-text {
+    color: #f472b6;          /* pink accent */
+    text-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
+    font-weight: 700;
+}
+
+.nav-link-glow {
+    color: #e5e7eb;
+}
+
+.nav-link-glow::after {
+    background: linear-gradient(90deg, #f472b6, #a855f7);
+}
+
+/* --- Layout still mobile-first --- */
+
+.main-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 90px;
+    padding-top: 10px;
+}
+
+/* --- Cards: dark violet-pink tones, less glassy --- */
+
+.glass-card,
+.card {
+    background: #070713;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 27, 109, 0.45);
+    padding: 14px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.glass-card:hover,
+.card:hover {
+    border-color: rgba(236, 72, 153, 0.7);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .glass-card,
+    .card.glass-card {
+        padding: 10px 12px;
+        border-radius: 14px;
+        margin-bottom: 10px;
+    }
+}
+
+/* --- Buttons: pink accent instead of blue --- */
+
+.btn-primary {
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    border-radius: 999px;
+    border: none;
+    box-shadow: 0 10px 24px rgba(236, 72, 153, 0.55);
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #fb7185, #db2777);
+    box-shadow: 0 14px 32px rgba(236, 72, 153, 0.75);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border: none;
+    border-radius: 999px;
+}
+
+/* --- Inputs: simple dark with pink focus --- */
+
+.form-control {
+    background: rgba(7, 7, 19, 0.95);
+    border-radius: 10px;
+    border: 1px solid #312e81;
+    box-shadow: none;
+}
+
+.form-control:focus {
+    background: rgba(7, 7, 19, 1);
+    border-color: #f472b6;
+    box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.65);
+}
+
+/* --- Stories: pink story ring --- */
+
+.story-ring-active {
+    background: none;
+    border-radius: 999px;
+    padding: 2px;
+    border: 2px solid transparent;
+    background-image:
+        linear-gradient(#070713, #070713),
+        conic-gradient(#fb7185, #ec4899, #a855f7, #fb7185);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
+}
+
+.story-ring-empty {
+    background: none;
+    border: 2px dashed rgba(148, 163, 184, 0.5);
+}
+
+/* keep avatar center dark */
+.story-avatar-wrapper {
+    background: #020014;
+}
+
+.story-add-badge {
+    background: #f472b6;
+    color: #020014;
+}
+
+/* --- Hashtags & links: soft pink / purple chips --- */
+
+.hashtag-chip {
+    background: rgba(236, 72, 153, 0.12);
+    border: 1px solid rgba(236, 72, 153, 0.7);
+    color: #f9a8d4;
+}
+
+.hashtag-chip:hover {
+    background: rgba(236, 72, 153, 0.2);
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.7);
+}
+
+.hashtag-link {
+    color: #f472b6;
+}
+
+.hashtag-link:hover {
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.7);
+}
+
+/* --- Swipe: like = pink, skip = muted --- */
+
+.swipe-card {
+    background: #070713;
+    border: 1px solid rgba(148, 27, 109, 0.55);
+}
+
+.swipe-btn.skip {
+    background: #020014;
+    border: 1px solid #4b5563;
+}
+
+.swipe-btn.like {
+    background: linear-gradient(135deg, #fb7185, #ec4899);
+    border: none;
+    color: #020014;
+}
+
+/* --- Profile avatar: pink-tinted rim --- */
+
+.profile-avatar-img,
+.profile-avatar-placeholder {
+    border: 2px solid rgba(236, 72, 153, 0.7);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.95);
+}
+
+/* --- Chat bubbles: theirs dark, mine pink --- */
+
+.chat-message.theirs .chat-bubble {
+    background: #0b0b17;
+    border: 1px solid #272143;
+}
+
+.chat-message.mine .chat-bubble {
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    color: #020014;
+    box-shadow: 0 10px 26px rgba(236, 72, 153, 0.7);
+}
+
+/* --- Bottom nav: dark + pink active --- */
+
+.mobile-bottom-nav {
+    background: rgba(5, 3, 12, 0.98);
+    border-top: 1px solid rgba(148, 27, 109, 0.4);
+    backdrop-filter: blur(16px);
+}
+
+.mobile-nav-item {
+    color: #9ca3af;
+}
+
+.mobile-nav-item.active {
+    color: #f9a8d4;
+    transform: translateY(-1px);
+}
+
+.mobile-nav-item.active i {
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.85);
+}
+
+/* --- Floating + button: pink pill --- */
+
+.fab-add-post {
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.95);
+}
+
+.fab-add-post i {
+    color: #020014;
+}
+
+
