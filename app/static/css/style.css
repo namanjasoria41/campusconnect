@@ -224,6 +224,134 @@ body::before {
     object-fit: cover;
 }
 
+/* ======= STORIES STRIP (FEED) ======= */
+
+.story-strip {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0 6px;
+}
+
+.story-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.story-bubble {
+    flex: 0 0 auto;
+    width: 70px;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+.story-ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Active story = gradient ring */
+.story-ring-active {
+    background: conic-gradient(
+        from 180deg,
+        #ff9a3c,
+        #ff2e63,
+        #9c1aff,
+        #2fd5ff,
+        #ff9a3c
+    );
+    box-shadow: 0 0 10px rgba(47, 213, 255, 0.5);
+}
+
+/* No story yet = subtle dashed ring */
+.story-ring-empty {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+}
+
+.story-avatar-wrapper,
+.story-avatar-img,
+.story-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-avatar-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.story-avatar-img {
+    object-fit: cover;
+}
+
+.story-avatar-placeholder {
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: #111319;
+}
+
+/* "+" badge for Add Story */
+.story-add-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translate(15%, 20%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #2fd5ff;
+    color: #050508;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #050508;
+}
+
+/* Label under each story */
+.story-bubble small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tap feedback */
+.story-bubble:active .story-ring {
+    transform: scale(0.95);
+    transition: transform 0.08s ease-out;
+}
+
+/* Heading spacing */
+.feed-heading {
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+/* Slightly tighter cards on small screens */
+@media (max-width: 768px) {
+    .glass-card {
+        padding: 10px 12px;
+        margin-bottom: 10px;
+    }
+
+    .glass-card p {
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+    }
+}
+
 /* ---------- HASHTAGS ---------- */
 
 .hashtag-chip {
@@ -455,3 +583,4 @@ body::before {
     font-size: 1.05rem;
     font-weight: 600;
 }
+
