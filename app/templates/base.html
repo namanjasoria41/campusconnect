@@ -12,61 +12,47 @@
   <!-- Google Font: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <!-- Icons for bottom nav -->
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body class="bg-dark text-light">
 
+<!-- ===================== NAVBAR ===================== -->
 <nav class="navbar navbar-expand-lg navbar-dark glass-nav shadow-sm">
   <div class="container-fluid">
 
+    <!-- Brand -->
     <a class="navbar-brand fw-bold neon-text" href="{{ url_for('main.feed') }}">
       CampusConnect
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarsExample">
+    <!-- Hamburger (manual JS toggle) -->
+    <button class="navbar-toggler" type="button" id="navToggleBtn" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Collapsible Menu -->
     <div class="collapse navbar-collapse" id="navbarsExample">
       <ul class="navbar-nav ms-auto gap-2">
 
         {% if current_user.is_authenticated %}
 
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('gossip.feed') }}">Gossips</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('main.feed') }}">Feed</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('events.list_events') }}">Events</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('swipe.swipe_view') }}">Swipe</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('chat.matches') }}">Chat</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('profiles.me') }}">Profile</a>
-          </li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('gossip.feed') }}">Gossips</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('main.feed') }}">Feed</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('events.list_events') }}">Events</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('swipe.swipe_view') }}">Swipe</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('chat.matches') }}">Chat</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('profiles.me') }}">Profile</a></li>
 
           {% if current_user.is_admin %}
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow text-warning" href="{{ url_for('admin.dashboard') }}">
-              Admin
-            </a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-glow text-warning" href="{{ url_for('admin.dashboard') }}">Admin</a>
+            </li>
           {% endif %}
 
           <li class="nav-item">
@@ -75,29 +61,23 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('auth.logout') }}">Logout</a>
-          </li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('auth.logout') }}">Logout</a></li>
 
         {% else %}
 
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('billing.pricing') }}">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('auth.login') }}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-glow" href="{{ url_for('auth.register') }}">Register</a>
-          </li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('billing.pricing') }}">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('auth.login') }}">Login</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-glow" href="{{ url_for('auth.register') }}">Register</a></li>
 
         {% endif %}
 
       </ul>
     </div>
+
   </div>
 </nav>
 
+<!-- ===================== MAIN CONTENT ===================== -->
 <div class="container main-container py-3">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -113,49 +93,57 @@
   {% block content %}{% endblock %}
 </div>
 
+<!-- ===================== SCRIPTS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Manual Navbar Toggle (Fix for mobile) -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const toggler = document.getElementById("navToggleBtn");
+  const navMenu = document.getElementById("navbarsExample");
+
+  if (toggler && navMenu) {
+    toggler.addEventListener("click", function () {
+      navMenu.classList.toggle("show");  // Bootstrap collapse class
+    });
+  }
+});
+</script>
+
+<!-- ===================== MOBILE BOTTOM NAV ===================== -->
 {% if current_user.is_authenticated %}
   {% set endpoint = request.endpoint or '' %}
 
   <nav class="mobile-bottom-nav d-lg-none">
-    <!-- FEED -->
+
     <a href="{{ url_for('main.feed') }}"
-       class="mobile-nav-item {% if endpoint.startswith('main.') %}active{% endif %}">
-      <i class="bi bi-house-door-fill"></i>
-      <span>Feed</span>
+       class="mobile-nav-item {% if 'main.' in endpoint %}active{% endif %}">
+      <i class="bi bi-house-door-fill"></i><span>Feed</span>
     </a>
 
-    <!-- GOSSIPS -->
     <a href="{{ url_for('gossip.feed') }}"
-       class="mobile-nav-item {% if endpoint.startswith('gossip.') %}active{% endif %}">
-      <i class="bi bi-chat-dots-fill"></i>
-      <span>Gossips</span>
+       class="mobile-nav-item {% if 'gossip.' in endpoint %}active{% endif %}">
+      <i class="bi bi-chat-dots-fill"></i><span>Gossips</span>
     </a>
 
-    <!-- EVENTS -->
     <a href="{{ url_for('events.list_events') }}"
-       class="mobile-nav-item {% if endpoint.startswith('events.') %}active{% endif %}">
-      <i class="bi bi-calendar-event-fill"></i>
-      <span>Events</span>
+       class="mobile-nav-item {% if 'events.' in endpoint %}active{% endif %}">
+      <i class="bi bi-calendar-event-fill"></i><span>Events</span>
     </a>
 
-    <!-- SWIPE -->
     <a href="{{ url_for('swipe.swipe_view') }}"
-       class="mobile-nav-item {% if endpoint.startswith('swipe.') %}active{% endif %}">
-      <i class="bi bi-heart-fill"></i>
-      <span>Swipe</span>
+       class="mobile-nav-item {% if 'swipe.' in endpoint %}active{% endif %}">
+      <i class="bi bi-heart-fill"></i><span>Swipe</span>
     </a>
 
-    <!-- PROFILE -->
     <a href="{{ url_for('profiles.me') }}"
-       class="mobile-nav-item {% if endpoint.startswith('profiles.') %}active{% endif %}">
-      <i class="bi bi-person-circle"></i>
-      <span>Me</span>
+       class="mobile-nav-item {% if 'profiles.' in endpoint %}active{% endif %}">
+      <i class="bi bi-person-circle"></i><span>Me</span>
     </a>
+
   </nav>
 {% endif %}
 
 </body>
 </html>
-
 
