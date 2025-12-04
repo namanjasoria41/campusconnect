@@ -358,3 +358,46 @@ body::before {
     }
 }
 
+/* =========================================
+   FINAL MOBILE POLISH
+   ========================================= */
+
+/* 1) Clean top navbar on mobile (because bottom bar is main nav) */
+@media (max-width: 768px) {
+    /* Hide nav links, keep brand + toggler */
+    .glass-nav .navbar-nav {
+        display: none;
+    }
+
+    .navbar-brand {
+        font-size: 1.05rem;
+    }
+}
+
+/* 2) Make cards tighter and more "app-like" on small screens */
+@media (max-width: 768px) {
+    .glass-card,
+    .card.glass-card {
+        padding: 10px 12px;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
+    }
+
+    h2, h3 {
+        font-size: 1.05rem;
+    }
+
+    .story-strip {
+        margin-bottom: 10px;
+    }
+}
+
+/* 3) Desktop: keep normal site behaviour */
+@media (min-width: 992px) {
+    .main-container {
+        padding-bottom: 24px;  /* already in your file, okay if repeated */
+    }
+}
+
+
