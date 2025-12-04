@@ -8,7 +8,7 @@
     <div class="glass-card mb-3">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0 feed-heading">My Profile</h4>
-        <span class="text-muted tiny">Make it easier for others to find you</span>
+        <span class="tiny text-muted">Help others know you better</span>
       </div>
 
       <div class="row">
@@ -35,11 +35,27 @@
 
         <!-- Form -->
         <div class="col-md-8">
-          <form method="post" enctype="multipart/form-data" class="profile-form">
+          <form method="post" enctype="multipart/form-data">
+
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Year</label>
+                <input class="form-control" name="year"
+                       placeholder="2nd year, 3rd year"
+                       value="{{ user.year or '' }}">
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Branch</label>
+                <input class="form-control" name="branch"
+                       placeholder="CSE, ECE, AIML..."
+                       value="{{ user.branch or '' }}">
+              </div>
+            </div>
+
             <div class="mb-3">
               <label class="form-label">Bio</label>
               <textarea class="form-control" name="bio" rows="3"
-                        placeholder="Tell others a bit about you...">{{ user.bio or "" }}</textarea>
+                        placeholder="Short intro about you...">{{ user.bio or '' }}</textarea>
             </div>
 
             <div class="mb-3">
@@ -47,7 +63,7 @@
               <input class="form-control" name="interests"
                      placeholder="music, startups, anime, football"
                      value="{{ user.interests or '' }}">
-              <div class="form-text">Use commas to separate your interests.</div>
+              <div class="form-text tiny">Use commas to separate your interests.</div>
             </div>
 
             <div class="mb-3">
@@ -82,3 +98,4 @@
 </div>
 
 {% endblock %}
+
