@@ -4,98 +4,170 @@
 
 {% set first_story = stories|first %}
 
-<div class="story-viewer-container">
+{% if not first_story %}
+  <p class="text-muted">No stories to show.</p>
+{% else %}
+  {% set author = first_story.author %}
 
-  {% if first_story %}
-    {% set author = first_story.author %}
+  <div class="story-viewer-fullscreen">
 
     <div class="story-viewer-card glass-card">
 
-      <!-- Header -->
+      <!-- TOP: header + close -->
       <div class="d-flex justify-content-between align-items-center mb-2">
         <div class="d-flex align-items-center gap-2">
           {% if author.photo %}
-            <img src="{{ url_for('static', filename='uploads/' ~ author.photo) }}" class="story-viewer-avatar">
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ author.photo) }}"
+              class="story-viewer-avatar"
+              onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default-avatar.png') }}';"
+            >
           {% else %}
-            <div class="story-viewer-avatar-placeholder">
+            <div class="story-viewer-avatar placeholder">
               {{ author.name[0]|upper }}
             </div>
           {% endif %}
+
           <div>
-            <strong>{{ author.name }}</strong><br>
-            <small class="text-muted">Stories</small>
+            <div class="fw-semibold small">{{ author.name }}</div>
+            <div class="text-muted tiny" id="story-time-label">
+              {{ first_story.created_at.strftime('%d %b %H:%M') }}
+            </div>
           </div>
         </div>
 
-        <a href="{{ url_for('main.feed') }}" class="btn btn-sm btn-outline-light">Close</a>
+        <a href="{{ url_for('main.feed') }}" class="btn btn-sm btn-outline-light">
+          Close
+        </a>
       </div>
 
-      <!-- Story Media -->
-      <div class="story-viewer-main mb-3">
+      <!-- PROGRESS BARS -->
+      <div class="story-progress-bar mb-2">
+        {% for s in stories %}
+          <div class="story-progress-segment">
+            <div class="story-progress-fill"></div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- MEDIA AREA: tap left/right + swipe -->
+      <div class="story-media-wrapper" id="story-touch-area">
         <img id="story-media"
              src="{{ url_for('static', filename='uploads/' ~ first_story.media) }}"
-             class="story-viewer-image">
-      </div>
+             class="story-media-img">
 
-      <!-- Controls -->
-      <div class="d-flex justify-content-between">
-        <button class="btn btn-outline-light btn-sm" id="story-prev-btn">Prev</button>
-        <button class="btn btn-outline-light btn-sm" id="story-next-btn">Next</button>
+        <!-- tap zones -->
+        <div class="story-tap-zone left" id="tap-left"></div>
+        <div class="story-tap-zone right" id="tap-right"></div>
       </div>
 
     </div>
+  </div>
 
-  {% else %}
-    <div class="glass-card text-center">
-      <p class="mb-0">No active stories.</p>
-    </div>
-  {% endif %}
+  <script>
+    // --- Data from backend ---
+    const storyMedia = [
+      {% for s in stories %}
+        {
+          url: "{{ url_for('static', filename='uploads/' ~ s.media) }}",
+          timeLabel: "{{ s.created_at.strftime('%d %b %H:%M') }}"
+        }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
 
-</div>
+    let currentIndex = 0;
+    const imgEl = document.getElementById("story-media");
+    const timeLabel = document.getElementById("story-time-label");
+    const segments = document.querySelectorAll(".story-progress-segment");
+    const fills = document.querySelectorAll(".story-progress-fill");
 
-{% if stories %}
-<script>
-// ---------------------------------------------------------
-// Build clean JS array using tojson
-// ---------------------------------------------------------
-const storyMedia = {{ story_urls | tojson }};
-let currentIndex = 0;
+    function setActiveStory(index) {
+      if (index < 0 || index >= storyMedia.length) return;
+      currentIndex = index;
 
-const imgEl = document.getElementById("story-media");
-const prevBtn = document.getElementById("story-prev-btn");
-const nextBtn = document.getElementById("story-next-btn");
+      const story = storyMedia[currentIndex];
+      imgEl.src = story.url;
+      timeLabel.textContent = story.timeLabel;
 
-// Update media
-function updateStory() {
-  imgEl.src = storyMedia[currentIndex];
-}
+      // reset all segments
+      fills.forEach((fill, i) => {
+        if (i < currentIndex) {
+          fill.style.width = "100%";
+        } else if (i === currentIndex) {
+          fill.style.width = "0%";
+        } else {
+          fill.style.width = "0%";
+        }
+      });
 
-// Prev
-prevBtn.addEventListener("click", () => {
-  if (currentIndex > 0) {
-    currentIndex -= 1;
-    updateStory();
-  }
-});
+      restartAutoTimer();
+      animateCurrentProgress();
+    }
 
-// Next
-nextBtn.addEventListener("click", () => {
-  if (currentIndex < storyMedia.length - 1) {
-    currentIndex += 1;
-    updateStory();
-  }
-});
+    function nextStory() {
+      if (currentIndex < storyMedia.length - 1) {
+        setActiveStory(currentIndex + 1);
+      } else {
+        // end: go back to feed
+        window.location.href = "{{ url_for('main.feed') }}";
+      }
+    }
 
-// Auto-advance every 5s
-let autoTimer = setInterval(() => {
-  if (currentIndex < storyMedia.length - 1) {
-    currentIndex += 1;
-    updateStory();
-  } else {
-    clearInterval(autoTimer);
-  }
-}, 5000);
-</script>
+    function prevStory() {
+      if (currentIndex > 0) {
+        setActiveStory(currentIndex - 1);
+      } else {
+        // at first: just re-start progress
+        setActiveStory(0);
+      }
+    }
+
+    // tap zones
+    document.getElementById("tap-left").addEventListener("click", prevStory);
+    document.getElementById("tap-right").addEventListener("click", nextStory);
+
+    // swipe support
+    const touchArea = document.getElementById("story-touch-area");
+    let touchStartX = 0;
+
+    touchArea.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    });
+
+    touchArea.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) < 40) return;  // ignore tiny moves
+      if (dx < 0) {
+        nextStory(); // swipe left -> next
+      } else {
+        prevStory(); // swipe right -> prev
+      }
+    });
+
+    // auto-advance
+    let autoTimer = null;
+    const STORY_DURATION = 5000; // 5s
+
+    function restartAutoTimer() {
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(nextStory, STORY_DURATION);
+    }
+
+    // animate progress of current story
+    function animateCurrentProgress() {
+      const currentFill = fills[currentIndex];
+      currentFill.style.transition = "none";
+      currentFill.style.width = "0%";
+      // force reflow
+      void currentFill.offsetWidth;
+      currentFill.style.transition = `width ${STORY_DURATION}ms linear`;
+      currentFill.style.width = "100%";
+    }
+
+    // init
+    setActiveStory(0);
+  </script>
 {% endif %}
 
 {% endblock %}
+
