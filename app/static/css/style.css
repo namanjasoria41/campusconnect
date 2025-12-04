@@ -290,3 +290,71 @@ body::before {
     .story-bubble { width: 60px; }
     h2 { font-size: 1.2rem; }
 }
+
+/* ---------- MOBILE MAIN CONTAINER ---------- */
+
+.main-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 80px; /* space for bottom nav */
+}
+
+/* ---------- MOBILE BOTTOM NAV (INSTAGRAM STYLE) ---------- */
+
+.mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+    background: rgba(5, 5, 8, 0.96);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1030;
+}
+
+.mobile-nav-item {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    color: #b8b8b8;
+    font-size: 0.75rem;
+    padding-top: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-nav-item i {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+}
+
+.mobile-nav-item span {
+    display: block;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.mobile-nav-item.active {
+    color: #2fd5ff;
+    transform: translateY(-2px);
+}
+
+.mobile-nav-item.active i {
+    text-shadow: 0 0 8px rgba(47, 213, 255, 0.6);
+}
+
+.mobile-nav-item:active {
+    transform: translateY(1px) scale(0.97);
+}
+
+/* Desktop: we don't need bottom nav spacing */
+@media (min-width: 992px) {
+    .main-container {
+        padding-bottom: 24px;
+    }
+}
+
