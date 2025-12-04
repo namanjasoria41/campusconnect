@@ -13,6 +13,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Icons for bottom nav -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 </head>
 <body class="bg-dark text-light">
 
@@ -110,6 +114,48 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% if current_user.is_authenticated %}
+  {% set endpoint = request.endpoint or '' %}
+
+  <nav class="mobile-bottom-nav d-lg-none">
+    <!-- FEED -->
+    <a href="{{ url_for('main.feed') }}"
+       class="mobile-nav-item {% if endpoint.startswith('main.') %}active{% endif %}">
+      <i class="bi bi-house-door-fill"></i>
+      <span>Feed</span>
+    </a>
+
+    <!-- GOSSIPS -->
+    <a href="{{ url_for('gossip.feed') }}"
+       class="mobile-nav-item {% if endpoint.startswith('gossip.') %}active{% endif %}">
+      <i class="bi bi-chat-dots-fill"></i>
+      <span>Gossips</span>
+    </a>
+
+    <!-- EVENTS -->
+    <a href="{{ url_for('events.list_events') }}"
+       class="mobile-nav-item {% if endpoint.startswith('events.') %}active{% endif %}">
+      <i class="bi bi-calendar-event-fill"></i>
+      <span>Events</span>
+    </a>
+
+    <!-- SWIPE -->
+    <a href="{{ url_for('swipe.swipe_view') }}"
+       class="mobile-nav-item {% if endpoint.startswith('swipe.') %}active{% endif %}">
+      <i class="bi bi-heart-fill"></i>
+      <span>Swipe</span>
+    </a>
+
+    <!-- PROFILE -->
+    <a href="{{ url_for('profiles.me') }}"
+       class="mobile-nav-item {% if endpoint.startswith('profiles.') %}active{% endif %}">
+      <i class="bi bi-person-circle"></i>
+      <span>Me</span>
+    </a>
+  </nav>
+{% endif %}
+
 </body>
 </html>
+
 
