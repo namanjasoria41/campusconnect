@@ -1,51 +1,84 @@
 {% extends "base.html" %}
 {% block title %}My Profile - CampusConnect{% endblock %}
 {% block content %}
-<h2>My Profile</h2>
 
-<div class="row">
-  <div class="col-md-4">
-    {% if user.photo %}
-      <img src="{{ url_for('static', filename='uploads/' ~ user.photo) }}"
-           class="img-fluid rounded mb-3" alt="Profile photo">
-    {% else %}
-      <div class="border rounded p-4 text-center mb-3">No photo</div>
-    {% endif %}
-  </div>
-  <div class="col-md-8">
-    <form method="post" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input class="form-control" value="{{ user.name }}" disabled>
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+
+    <div class="glass-card mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0 feed-heading">My Profile</h4>
+        <span class="text-muted tiny">Make it easier for others to find you</span>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Year</label>
-        <input class="form-control" name="year" value="{{ user.year or '' }}">
+
+      <div class="row">
+        <!-- Avatar -->
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+          {% if user.photo %}
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ user.photo) }}"
+              class="profile-avatar-img mb-2"
+              alt="Profile photo"
+              onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/default-avatar.png') }}';"
+            >
+          {% else %}
+            <div class="profile-avatar-placeholder mb-2">
+              {{ user.name[0]|upper }}
+            </div>
+          {% endif %}
+
+          <div class="small text-muted">
+            {{ user.name }}<br>
+            {{ user.year or "" }} {{ user.branch or "" }}
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="col-md-8">
+          <form method="post" enctype="multipart/form-data" class="profile-form">
+            <div class="mb-3">
+              <label class="form-label">Bio</label>
+              <textarea class="form-control" name="bio" rows="3"
+                        placeholder="Tell others a bit about you...">{{ user.bio or "" }}</textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Interests</label>
+              <input class="form-control" name="interests"
+                     placeholder="music, startups, anime, football"
+                     value="{{ user.interests or '' }}">
+              <div class="form-text">Use commas to separate your interests.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Instagram handle</label>
+              <div class="input-group">
+                <span class="input-group-text">@</span>
+                <input class="form-control" name="instagram_handle"
+                       placeholder="username"
+                       value="{{ user.instagram_handle or '' }}">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Looking for</label>
+              <input class="form-control" name="looking_for"
+                     placeholder="events, dating, friends"
+                     value="{{ user.looking_for or '' }}">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Profile photo</label>
+              <input class="form-control" type="file" name="photo" accept="image/*">
+            </div>
+
+            <button class="btn btn-primary">Save changes</button>
+          </form>
+        </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Branch</label>
-        <input class="form-control" name="branch" value="{{ user.branch or '' }}">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Bio</label>
-        <textarea class="form-control" name="bio" rows="3">{{ user.bio or '' }}</textarea>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Interests (comma separated)</label>
-        <input class="form-control" name="interests" value="{{ user.interests or '' }}">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Looking for</label>
-        <input class="form-control" name="looking_for"
-               placeholder="events,dating,friends"
-               value="{{ user.looking_for or '' }}">
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Profile photo</label>
-        <input class="form-control" type="file" name="photo" accept="image/*">
-      </div>
-      <button class="btn btn-primary">Save</button>
-    </form>
+
+    </div>
   </div>
 </div>
+
 {% endblock %}
