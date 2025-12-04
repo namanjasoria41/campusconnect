@@ -1,26 +1,46 @@
 {% extends "base.html" %}
 {% block title %}Register - CampusConnect{% endblock %}
 {% block content %}
-<h2>Register</h2>
-<form method="post">
-  <div class="mb-3">
-    <label class="form-label">Name</label>
-    <input class="form-control" name="name" required>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+
+    <div class="glass-card auth-card">
+      <h3 class="mb-3 text-center">Create your account</h3>
+      <p class="text-muted small text-center mb-4">
+        Use your college email to access campus-only features.
+      </p>
+
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control" name="name" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">College Email</label>
+          <input class="form-control" name="email" type="email" required>
+          <div class="form-text">Use your @vitbhopal.ac.in email.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control" name="password" type="password" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-control" name="confirm" type="password" required>
+        </div>
+
+        <button class="btn btn-primary w-100 mb-2">Sign up</button>
+
+        <div class="text-center small">
+          <span class="text-muted">Already have an account?</span>
+          <a href="{{ url_for('auth.login') }}">Login</a>
+        </div>
+      </form>
+    </div>
+
   </div>
-  <div class="mb-3">
-    <label class="form-label">College Email</label>
-    <input class="form-control" name="email" type="email" required>
-    <div class="form-text">Use your @vitbhopal.ac.in email.</div>
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Password</label>
-    <input class="form-control" name="password" type="password" required>
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Confirm Password</label>
-    <input class="form-control" name="confirm" type="password" required>
-  </div>
-  <button class="btn btn-primary">Sign up</button>
-  <a class="btn btn-link" href="{{ url_for('auth.login') }}">Already have an account?</a>
-</form>
+</div>
+
 {% endblock %}
+
