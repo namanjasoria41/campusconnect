@@ -1215,5 +1215,34 @@ body::before {
     color: #020014;
 }
 
+/* ===== FIX MOBILE NAVBAR COLLAPSE ===== */
+@media (max-width: 991.98px) {
+
+  /* By default hide the collapse */
+  .glass-nav .navbar-collapse {
+    display: none !important;
+    flex-basis: 100%;
+  }
+
+  /* When .show is toggled, FORCE it to display */
+  .glass-nav .navbar-collapse.show {
+    display: block !important;
+    background: rgba(10, 10, 20, 0.96);
+    padding: 0.5rem 1rem 0.75rem;
+    border-radius: 0 0 18px 18px;
+  }
+
+  /* Stack nav links vertically in the mobile dropdown */
+  .glass-nav .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .glass-nav .nav-link {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
 
 
