@@ -41,11 +41,19 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Collapsible content -->
+    <!-- Collapsible Menu -->
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto gap-2">
 
         {% if current_user.is_authenticated %}
+
+          <!-- SEARCH -->
+          <li class="nav-item">
+            <a class="nav-link nav-link-glow"
+               href="{{ url_for('profiles.search_users') }}">
+              <i class="bi bi-search"></i> Search
+            </a>
+          </li>
 
           <li class="nav-item">
             <a class="nav-link nav-link-glow" href="{{ url_for('main.feed') }}">Feed</a>
@@ -134,7 +142,7 @@
   {% block content %}{% endblock %}
 </div>
 
-<!-- ===================== BOOTSTRAP JS (REQUIRED) ===================== -->
+<!-- ===================== BOOTSTRAP JS ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- ===================== MOBILE BOTTOM NAV ===================== -->
@@ -147,6 +155,12 @@
      class="mobile-nav-item {% if 'main.' in endpoint %}active{% endif %}">
     <i class="bi bi-house-door-fill"></i>
     <span>Feed</span>
+  </a>
+
+  <a href="{{ url_for('profiles.search_users') }}"
+     class="mobile-nav-item {% if 'profiles.search' in endpoint %}active{% endif %}">
+    <i class="bi bi-search"></i>
+    <span>Search</span>
   </a>
 
   <a href="{{ url_for('gossip.feed') }}"
