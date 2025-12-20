@@ -5,7 +5,7 @@ from . import profiles_bp
 from ..extensions import db
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
-from .models import User
+from app.models import User
 from app import db
 
 profiles_bp = Blueprint("profiles", __name__, url_prefix="/profiles")
@@ -60,5 +60,6 @@ def search_users():
 
     # Normal page load
     return render_template("profiles/search.html", users=users, q=q)
+
 
 
