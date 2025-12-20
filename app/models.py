@@ -272,3 +272,4 @@ class Report(db.Model):
 
     resolved = db.Column(db.Boolean, default=False)
     resolved_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
