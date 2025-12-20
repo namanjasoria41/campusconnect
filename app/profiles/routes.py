@@ -3,6 +3,12 @@ from flask import render_template, request, redirect, url_for, flash, current_ap
 from flask_login import login_required, current_user
 from . import profiles_bp
 from ..extensions import db
+from flask import Blueprint, render_template, request, jsonify
+from flask_login import login_required
+from .models import User
+from app import db
+
+profiles_bp = Blueprint("profiles", __name__, url_prefix="/profiles")
 
 
 @profiles_bp.route("/me", methods=["GET", "POST"])
@@ -29,3 +35,30 @@ def me():
         return redirect(url_for("profiles.me"))
 
     return render_template("profiles/me.html", user=user)
+
+@profiles_bp.route("/search")
+@login_required
+def search_users():
+    q = request.args.get("q", "").strip()
+
+    users = []
+    if q:
+        users = User.query.filter(
+            User.name.ilike(f"%{q}%")
+        ).limit(20).all()
+
+    # AJAX request
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return jsonify([
+            {
+                "id": u.id,
+                "name": u.name,
+                "photo": u.photo
+            }
+            for u in users
+        ])
+
+    # Normal page load
+    return render_template("profiles/search.html", users=users, q=q)
+
+
