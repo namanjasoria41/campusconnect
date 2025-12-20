@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Search Users - CampusConnect{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+
+    <div class="glass-card mb-3">
+      <h4 class="feed-heading mb-2">Search students</h4>
+
+      <input type="text"
+             id="userSearchInput"
+             class="form-control"
+             placeholder="Search by name..."
+             value="{{ q or '' }}"
+             autocomplete="off">
+    </div>
+
+    <div class="glass-card">
+      <div id="searchResults">
+
+        {% if users %}
+          {% for u in users %}
+            <a href="{{ url_for('profiles.view', user_id=u.id) }}"
+               class="d-flex align-items-center gap-2 mb-2 text-decoration-none text-light">
+
+              {% if u.photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ u.photo) }}"
+                     class="rounded-circle"
+                     width="42" height="42"
+                     onerror="this.src='{{ url_for('static', filename='img/default-avatar.png') }}'">
+              {% else %}
+                <div class="rounded-circle bg-secondary text-center"
+                     style="width:42px;height:42px;line-height:42px;">
+                  {{ u.name[0]|upper }}
+                </div>
+              {% endif %}
+
+              <div>
+                <strong>{{ u.name }}</strong><br>
+                <span class="tiny text-muted">
+                  {{ u.year or '' }} {{ u.branch or '' }}
+                </span>
+              </div>
+
+            </a>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted small">Start typing to search users.</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const input = document.getElementById("userSearchInput");
+const results = document.getElementById("searchResults");
+
+let timeout = null;
+
+input.addEventListener("input", function () {
+  clearTimeout(timeout);
+  const q = this.value.trim();
+
+  timeout = setTimeout(() => {
+    if (!q) {
+      results.innerHTML = '<p class="text-muted small">Start typing to search users.</p>';
+      return;
+    }
+
+    fetch(`/profiles/search?q=${encodeURIComponent(q)}`, {
+      headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.length) {
+        results.innerHTML = '<p class="text-muted small">No users found.</p>';
+        return;
+      }
+
+      results.innerHTML = data.map(u => `
+        <a href="/profiles/${u.id}"
+           class="d-flex align-items-center gap-2 mb-2 text-decoration-none text-light">
+          ${
+            u.photo
+              ? `<img src="/static/uploads/${u.photo}" class="rounded-circle" width="42" height="42">`
+              : `<div class="rounded-circle bg-secondary text-center"
+                   style="width:42px;height:42px;line-height:42px;">${u.name[0]}</div>`
+          }
+          <div>
+            <strong>${u.name}</strong>
+          </div>
+        </a>
+      `).join("");
+    });
+  }, 300);
+});
+</script>
+
+{% endblock %}
