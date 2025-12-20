@@ -61,5 +61,11 @@ def search_users():
     # Normal page load
     return render_template("profiles/search.html", users=users, q=q)
 
+@profiles_bp.route("/<int:user_id>")
+@login_required
+def view(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template("profiles/view.html", user=user)
+
 
 
