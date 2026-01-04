@@ -1,15 +1,15 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from . import main_bp
-from ..models import Post
+from ..models import Post, Hashtag, Story, User
 from ..extensions import db
 from datetime import datetime
-from ..models import Post, Hashtag, Story, User   # add Story, User
 
 
 @main_bp.route("/", methods=["GET", "POST"])
 @login_required
 def feed():
+    # Handle POST request - create new post
     if request.method == "POST":
         text = request.form.get("text")
         if not text:
@@ -21,20 +21,15 @@ def feed():
             flash("Post created.", "success")
             return redirect(url_for("main.feed"))
 
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    return render_template("main/feed.html", posts=posts)
- # POST part with post + hashtags — keep as you already have
-
-    # --- STORIES: fetch active stories (not expired) ---
+    # Handle GET request - display feed
     now = datetime.utcnow()
 
-    # Current user's latest story (if any)
+    # Fetch active stories
     my_story = Story.query.filter(
         Story.user_id == current_user.id,
         Story.expires_at > now
     ).order_by(Story.created_at.desc()).first()
 
-    # Other users who have at least one active story
     story_users = (
         db.session.query(User)
         .join(Story, Story.user_id == User.id)
@@ -46,6 +41,7 @@ def feed():
         .all()
     )
 
+    # Fetch posts and trending hashtags
     posts = Post.query.order_by(Post.created_at.desc()).all()
     trending = Hashtag.query.order_by(Hashtag.count.desc()).limit(10).all()
 
@@ -56,3 +52,4 @@ def feed():
         my_story=my_story,
         story_users=story_users,
     )
+
