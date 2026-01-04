@@ -119,6 +119,7 @@ class Hashtag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    count = db.Column(db.Integer, default=0)  # Track hashtag usage count
 
     posts = db.relationship(
         "Post",
@@ -136,6 +137,7 @@ class Event(db.Model):
     event_type = db.Column(db.String(50))  # tech/cultural/sports
     date = db.Column(db.DateTime)
     location = db.Column(db.String(120))
+    created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # Track event creator
     is_official = db.Column(db.Boolean, default=False)  # admin posted
     highlight = db.Column(db.Boolean, default=False)    # show banner
 
@@ -272,4 +274,5 @@ class Report(db.Model):
 
     resolved = db.Column(db.Boolean, default=False)
     resolved_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
 
