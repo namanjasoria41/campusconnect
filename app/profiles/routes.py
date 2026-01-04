@@ -1,14 +1,10 @@
 import os
-from flask import render_template, request, redirect, url_for, flash, current_app
+from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from flask_login import login_required, current_user
 from . import profiles_bp
 from ..extensions import db
-from flask import Blueprint, render_template, request, jsonify
-from flask_login import login_required
-from app.models import User
-from app import db
+from ..models import User
 
-profiles_bp = Blueprint("profiles", __name__, url_prefix="/profiles")
 
 
 @profiles_bp.route("/me", methods=["GET", "POST"])
@@ -66,6 +62,7 @@ def search_users():
 def view(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("profiles/view.html", user=user)
+
 
 
 
